@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Монгол бичиг — учимся читать</title><style>body{margin:0;background:#f7f7f5;color:#27332b;font:16px/1.5 system-ui}#app>p{padding:30px}</style><style id="trainer-loading-styles">.nu-loading {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: clamp(20px, 5vw, 48px);
+  place-items: center;
+  background: radial-gradient(ellipse at 50% 42%, #FFFCF5 0%, #F6F0E4 72%);
+  color: #23455E;
+  font: 16px/1.5 Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.nu-loading-panel {
+  width: min(100%, 366px);
+}
+
+.nu-loading-art {
+  box-sizing: border-box;
+  position: relative;
+  padding: 8px;
+  margin-bottom: clamp(20px, 5vw, 30px);
+  border: 1px solid #DCCDB3;
+  border-radius: 16px;
+  background: #FFFCF5;
+}
+
+.nu-loading-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: 10px;
+  background: #EDE2CB;
+}
+
+.nu-loading .nu-loading-title {
+  margin: 0;
+  font: 700 clamp(29px, 7vw, 39px)/1.15 Arial, Helvetica, sans-serif;
+  letter-spacing: -.035em;
+}
+
+.nu-loading .nu-loading-status {
+  max-width: 31ch;
+  margin: 11px auto 0;
+  color: #655C4D;
+  font: 400 16px/1.55 Arial, Helvetica, sans-serif;
+}
+
+.nu-loading-track {
+  position: relative;
+  overflow: hidden;
+  width: 90px;
+  height: 3px;
+  margin: 18px auto 0;
+  border-radius: 10px;
+  background: #E8D9BE;
+}
+
+.nu-loading-track span {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: inherit;
+  background: #AB5942;
+  animation: nu-loading-sweep 1.9s ease-in-out infinite;
+}
+
+@keyframes nu-loading-sweep {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(275%); }
+}
+
+.nu-loading-retry {
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 9px 22px;
+  border: 1px solid #23455E;
+  border-radius: 9px;
+  background: #23455E;
+  color: #FFFCF5;
+  font: 600 15px/1.4 Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+.nu-loading-retry[hidden],
+.nu-loading[data-loader-state="error"] .nu-loading-track {
+  display: none;
+}
+
+.nu-loading-retry:hover { background: #1A3548; }
+
+.nu-loading-retry:focus-visible {
+  outline: 2px solid #AB5942;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nu-loading-track span {
+    margin-inline: auto;
+    animation: none;
+  }
+}
+</style></head><body><div id="app" class="app min-h-screen flex flex-col"><section class="nu-loading" data-loader data-loader-state="loading" aria-labelledby="nu-loading-title">
+  <div class="nu-loading-panel">
+    <div class="nu-loading-art" aria-hidden="true">
+      <img src="./ger.webp" alt="" width="1200" height="800" decoding="async">
+    </div>
+    <h1 class="nu-loading-title" id="nu-loading-title">Монгол бичиг</h1>
+    <p class="nu-loading-status" data-loader-status role="status" aria-atomic="true">Загружаем тренажёр…</p>
+    <div class="nu-loading-track" aria-hidden="true"><span></span></div>
+    <button class="nu-loading-retry" type="button" data-loader-retry hidden>Повторить</button>
+  </div>
+</section>
+</div><script data-loader-controller>(() => {
+    const app = document.getElementById('app');
+    const loader = app.querySelector('[data-loader]');
+    const status = loader.querySelector('[data-loader-status]');
+    const retry = loader.querySelector('[data-loader-retry]');
+    retry.addEventListener('click', () => location.reload());
+
+    window.nuTrainerLoadFailed = error => {
+        console.error('Mongolian trainer could not start', error);
+        if (!app.contains(loader)) app.replaceChildren(loader);
+        loader.dataset.loaderState = 'error';
+        status.textContent = 'Не удалось загрузить тренажёр. Попробуйте ещё раз.';
+        retry.hidden = false;
+    };
+})();
+</script><script defer src="./trainer.js?v=8ebf8889988e" onerror="nuTrainerLoadFailed(event)"></script></body></html>
