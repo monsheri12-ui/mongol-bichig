@@ -406,7 +406,7 @@ function joinMaterial(u){return `Словарных написаний: ${u.word
 function joinAmbiguity(){return `<p class="join-ambiguity">Некоторые формы А и Э, О и У совпадают. Учимся читать их с опорой на целое слово и правила. В заданиях для сравнения убраны неразличимые начертания.</p>`;}
 function joinRuleDetail(u){const letters=u.keys.filter(k=>CONSONANT_IDS.includes(k));if(!letters.length)return '';return `<div class="join-letter-rule">${letters.map(k=>`<h3>Что проверить у ${COURSE_INFO[k].letter}</h3><p>${esc(TEACHING.letters[k].main)}</p>`).join('')}${u.group==='cv'&&u.keys[0]==='x1828'?'<p>После Н в этом соединении стоит гласная. Сравни точку в срединном образце с правилом Н перед гласной.</p>':''}</div>`;}
 function joinICallout(){return `<section class="join-reading-callout"><div><h2>А что с ИИ?</h2><p>Есть слова с двумя письменными И подряд. Ещё есть одна И с двойным очертанием и долгое И в современном чтении. Рассмотрим три цветных примера рядом.</p></div>${button('Разобраться с ИИ →','join-ii','primary')}</section>`;}
-function joinIGuide(){return sectionHeading('ИИ, двойная И и долгое И','Начнём с количества записанных букв, затем посмотрим на их форму и прочитаем целое слово.','ТРИ СЛУЧАЯ С БУКВОЙ И')+`<div class="join-index-actions">${button('← К долгим гласным и дифтонгам','join-tab','quiet-link','data-tab="reading"')}</div><p class="join-ambiguity">В современном чтении ИЙ обозначает долгое И. В старом письме отдельно узнаём две буквы И и двойное очертание одной И. Одинаковый синий цвет связывает каждую письменную И с её подписью.</p><div class="join-i-grid">${JOIN_DATA.iGuide.map((item,n)=>{const w=CONS_DATA.records[item.wordId],selected=joinISelections[n]??item.focus;return `<article class="join-i-card"><span class="mono">0${n+1} · И в записи: ${item.iCount}</span><h2>${esc(item.title)}</h2><div class="a-stage">${joinSvg(w,{color:true,selected,fontSize:80})}</div><div class="teach-letter-row" role="group" aria-label="Буквы примера ${n+1}">${visibleChars(w).map((t,i)=>button(`<small>${i+1}</small><strong style="color:${colorOf(t.ch)}">${nameOf(t.ch)}</strong>`,'join-i-letter','teach-letter'+(selected===t.index?' active':''),`data-guide="${n}" data-index="${t.index}" aria-label="Пример ${n+1}, буква ${nameOf(t.ch)}, место ${i+1}" aria-pressed="${selected===t.index}"`)).join('')}</div><div class="teach-modern"><span>Современное слово</span><strong lang="mn-Cyrl">${esc(w.modern)}</strong><p>${esc(item.meaning)}</p></div><p>${esc(item.rule)}</p><p class="join-unit-note">${esc(item.note)}</p><details class="join-word-source"><summary>Источник примера</summary>${joinSource(w,'ii-'+n)}</details>${n===0?button('Две И: 200 с цветом + 300 без →','join-open','primary','data-unit="vv-i-i"'):n===1?button('Форма одной И: 200 + 300 →','join-i-form','primary'):button('Долгое ИЙ: 200 + 300 →','join-open','primary','data-unit="reading-long-i"')}</article>`;}).join('')}</div><p class="join-material-note">Нажимай на подписи букв: рамка показывает выбранную букву в цельном написании. Для двух И сохранён один цвет буквы И; их места в слове подписаны разными номерами.</p>${joinCredits('ii-guide')}`;}
+function joinIGuide(){return sectionHeading('ИИ, двойная И и долгое И','Начнём с количества записанных букв, затем посмотрим на их форму и прочитаем целое слово.','ТРИ СЛУЧАЯ С БУКВОЙ И')+`<div class="join-index-actions">${button('← К долгим гласным и дифтонгам','join-tab','quiet-link','data-tab="reading"')}</div><p class="join-ambiguity">В современном чтении ИЙ обозначает долгое И. В старом письме отдельно узнаём две буквы И и двойное очертание одной И. Одинаковый синий цвет связывает каждую письменную И с её подписью.</p><div class="join-i-grid">${JOIN_DATA.iGuide.map((item,n)=>{const w=CONS_DATA.records[item.wordId],selected=joinISelections[n]??item.focus;return `<article class="join-i-card" data-bridge="i-guide-${n}"><span class="mono">0${n+1} · И в записи: ${item.iCount}</span><h2>${esc(item.title)}</h2><div class="a-stage">${joinSvg(w,{color:true,selected,fontSize:80})}</div><div class="teach-letter-row" role="group" aria-label="Буквы примера ${n+1}">${visibleChars(w).map((t,i)=>button(`<small>${i+1}</small><strong style="color:${colorOf(t.ch)}">${nameOf(t.ch)}</strong>`,'join-i-letter','teach-letter'+(selected===t.index?' active':''),`data-guide="${n}" data-index="${t.index}" aria-label="Пример ${n+1}, буква ${nameOf(t.ch)}, место ${i+1}" aria-pressed="${selected===t.index}"`)).join('')}</div>${iGuideWordSupport(w,selected,item.meaning)}<p>${esc(item.rule)}</p><p class="join-unit-note">${esc(item.note)}</p><details class="join-word-source"><summary>Источник примера</summary>${joinSource(w,'ii-'+n)}</details>${n===0?button('Две И: 200 с цветом + 300 без →','join-open','primary','data-unit="vv-i-i"'):n===1?button('Форма одной И: 200 + 300 →','join-i-form','primary'):button('Долгое ИЙ: 200 + 300 →','join-open','primary','data-unit="reading-long-i"')}</article>`;}).join('')}</div><p class="join-material-note">Нажимай на подписи букв: рамка показывает выбранную букву в цельном написании. Для двух И сохранён один цвет буквы И; их места в слове подписаны разными номерами.</p>${joinCredits('ii-guide')}`;}
 function joinWordNotes(w,tag){const raw=joinRaw(w);return `<div class="join-spelling"><span class="small-label">Буквы традиционного написания</span><div>${joinLabel(raw.text)}</div></div>${raw.modern?`<div class="teach-modern"><span>Современное слово — отдельное чтение</span><strong lang="mn-Cyrl">${esc(raw.modern)}</strong>${wordAuditRussianLine(raw)}${wordAlignmentExplanation(raw)}</div>`:wordAuditMissingCyrillic(raw,'Алфавитный образец соединения')}${w.parts?'<p class="context-kind">Составленный учебный контекст. Работаем только с записью в кавычках.</p>':''}<details class="join-word-source"><summary>Источник целевого написания</summary>${joinSource(w,tag)}</details>`;}
 function joinUnitCard(u){return button(`${u.seq?joinMini(u):`<span class="join-reading-mark">${esc(u.label)}</span>`}<span class="join-card-label">${u.seq?joinLabel(u.seq):u.group==='long'?'Долгий гласный':'Дифтонг'}</span><small>${joinDone(u,'guided')} / 200 с цветом<br>${joinDone(u,'blind')} / 300 без подсказок</small>`,'join-open','join-card',`data-unit="${u.id}" aria-label="Изучить сочетание ${esc(u.label)}"`);}
 function joinOpenIndex(tab='cv',letter=null){arcLeave();joinView.tab=JOIN_GROUPS[tab]?tab:'cv';if(letter){if(CONSONANT_IDS.includes(letter))joinView.letter=letter;else if(VOWEL_IDS.includes(letter))joinView.vowel=letter;}joinView.unit=null;state.section='combinations';state.screen='section';state.view='lesson';}
@@ -1467,13 +1467,13 @@ function dialogueMasthead(title, toolbar) {
 const renderLearningScreen = render;
 let renderedReadingRoute = '';
 const readingSelectionActions = new Set([
-    'pr-word', 'pr-letter', 'dl-word', 'dl-letter', 'teach-letter', 'align-letter'
+    'pr-word', 'pr-letter', 'dl-word', 'dl-letter', 'teach-letter', 'align-letter', 'join-i-letter'
 ]);
 
 function readingFocusSelector(element) {
     if (!element || !readingSelectionActions.has(element.dataset.action)) return '';
     let selector = 'button[data-action="' + element.dataset.action + '"]';
-    for (const key of ['word', 'key', 'index']) {
+    for (const key of ['word', 'key', 'index', 'guide']) {
         if (element.dataset[key] !== undefined) {
             selector += '[data-' + key + '="' + CSS.escape(element.dataset[key]) + '"]';
         }
@@ -1987,11 +1987,16 @@ function cyrillicWordDisclosure(word, bridge, chars, selected, focusSpan = null,
             + wordAlignmentExplanation(word, bridge, selected) : '') + '</details>';
 }
 
-function studyWordFootnote(word) {
+function studyWordFootnote(word, selected = null) {
     const ru = word.gloss || checkedRussianGloss(word);
     const gloss = ru ? '<p class="nu-word-meaning"><span class="nu-caption">По-русски</span>'
         + esc(ru) + '</p>' : '';
-    return gloss + cyrillicWordDisclosure(word, wordAlignment(word), visibleChars(word), null);
+    return gloss + cyrillicWordDisclosure(word, wordAlignment(word), visibleChars(word), selected);
+}
+
+function iGuideWordSupport(word, focus, gloss) {
+    const selected = visibleChars(word).findIndex(char => char.index === focus);
+    return scriptStudyNote(word, selected) + studyWordFootnote({...word, gloss}, selected);
 }
 
 nuBridge = function (word, bridge, key, selected = 0, action = 'pr-letter', focusSpan = null) {
@@ -2196,15 +2201,16 @@ function wordAuditRussianLine(word) {
     return word.modern ? '<p class="word-audit-note">Русский перевод для этого примера пока не приведён.</p>' : '';
 }
 
-function wordAuditMissingCyrillic(word, fallback) {
+function wordAuditMissingCyrillic(word, fallback, includeRussian = true) {
+    const russian = includeRussian ? wordAuditRussianLine(word) : '';
     if (word.kind === 'dictionary' || word.kind === 'attested-wordform') {
         return '<p class="word-audit-note">Современное написание кириллицей для этого примера пока не приведено.</p>'
-            + wordAuditRussianLine(word);
+            + russian;
     }
     if (word.kind === 'alphabet-example') {
         return '<p class="word-audit-note">Учебный образец. На нём видно, как буквы соединяются. Отдельного слова здесь нет.</p>';
     }
-    return '<p class="nu-caption">' + fallback + '</p>' + wordAuditRussianLine(word);
+    return (fallback ? '<p class="nu-caption">' + fallback + '</p>' : '') + russian;
 }
 
 function wordAuditFields(word) {
@@ -2418,7 +2424,7 @@ function wordAlignmentFeedback(word, key, focus = -1) {
     const ru = word.gloss || checkedRussianGloss(word);
     return nuBridge({...word, ru}, bridge, key,
         alignmentSelection(word, key, focus), 'align-letter')
-        + (!word.modern ? wordAuditMissingCyrillic(word, '') : !ru ? wordAuditRussianLine(word) : '');
+        + (!word.modern ? wordAuditMissingCyrillic(word, '', false) : !ru ? wordAuditRussianLine(word) : '');
 }
 
 function quotedReadingFocus(example, raw, tag, focus = -1) {
@@ -2475,7 +2481,7 @@ function wordAlignmentCard(word, key, model, focus = -1) {
     const active = visibleChars(word)[selected]?.index ?? focus;
     const ru = word.gloss || checkedRussianGloss(word);
     const content = nuBridge({...word, ru}, bridge, key, selected, 'align-letter');
-    const missing = !word.modern ? wordAuditMissingCyrillic(word, '') : !ru ? wordAuditRussianLine(word) : '';
+    const missing = !word.modern ? wordAuditMissingCyrillic(word, '', false) : !ru ? wordAuditRussianLine(word) : '';
     return '<section class="nu-teaching-word"><div class="nu-word-model">'
         + model(active) + '</div>' + content + missing + '</section>';
 }
@@ -2573,15 +2579,6 @@ ruleExample = function (example, index) {
         + (example.note && example.note !== bridge?.note
             ? '<p class="rule-example-note">' + esc(example.note) + '</p>' : '') + '</article>';
 };
-
-function readingExampleMeaning(word) {
-    if (!word?.modern) return '';
-    const russian = word.gloss || checkedRussianGloss(word);
-    return russian
-        ? '<p class="nu-word-meaning"><span lang="mn-Cyrl">' + esc(word.modern)
-            + '</span> — ' + esc(russian) + '</p>'
-        : '';
-}
 
 const ruleLessonBeforeQuestionMeaning = ruleLesson;
 ruleLesson = function () {
