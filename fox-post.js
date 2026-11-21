@@ -327,22 +327,22 @@ function foxPostDirectionObject() {
         + foxPostFly({x: point[0], y: point[1], action: 'direction', attrs: 'data-step="' + step + '"', inside: true}) + '</div>';
 }
 function foxPostPiece(letter) {
-    const id = letter === 'o' ? 'nom' : 'nam', word = foxPostWord(id), old = FONT_DATA;
-    FONT_DATA = CONS_DATA.font;
-    let segment;
-    try { segment = segments(word)[1]; } finally { FONT_DATA = old; }
-    let svg = joinSvg(word, {color: foxPostSave.lantern, fontSize: 80});
-    const [x, , width] = svg.match(/viewBox="([^"]+)"/)[1].split(' ').map(Number);
-    const crop = [x, segment.top - 15, width, segment.bottom - segment.top + 30];
-    svg = svg.replace(/viewBox="[^"]+"/, 'viewBox="' + crop.join(' ') + '"');
-    const open = svg.indexOf('>') + 1, end = svg.lastIndexOf('</svg>'), clip = 'fox-post-piece-' + letter;
-    svg = svg.slice(0, open) + '<defs><clipPath id="' + clip + '"><rect x="' + crop[0] + '" y="' + crop[1]
-        + '" width="' + crop[2] + '" height="' + crop[3] + '"/></clipPath></defs><g clip-path="url(#' + clip + ')">'
-        + svg.slice(open, end) + '</g></svg>';
+    const id = letter === 'o' ? 'nom' : 'nam', word = foxPostWord(id);
+    const run = word.runs.find(item => item.start <= 1 && item.end > 1);
+    const glyph = CONS_DATA.font.glyphs[run.g], bounds = glyph.bounds;
+    // Use only this contextual glyph. Cropping the whole word can leave a small
+    // piece of the neighbouring letter at the edge of a movable tile.
+    const view = [bounds[1] + run.y - 30, bounds[0] + run.x - 30,
+        bounds[3] - bounds[1] + 60, bounds[2] - bounds[0] + 60];
+    const fill = foxPostSave.lantern ? colorOf(visibleChars(word)[1].ch) : '#1A3C2B';
+    const svg = '<svg class="connected-word" role="img" aria-label="Контекстная форма '
+        + (letter === 'o' ? 'О' : 'А') + '" viewBox="' + view.join(' ') + '"><path d="' + glyph.d
+        + '" transform="matrix(0 1 1 0 ' + run.y + ' ' + run.x + ')" fill="' + fill + '"/></svg>';
     return '<button type="button" class="fp-wood-piece' + (foxPostWorld.piece === letter ? ' fp-piece-selected' : '')
         + '" data-action="fox-piece" data-letter="' + letter + '" data-fp-drag="piece-' + letter + '" aria-label="Взять дощечку ' + (letter === 'o' ? 'О' : 'А') + '">'
         + svg + '<span>' + (letter === 'o' ? 'О' : 'А') + '</span></button>';
 }
+
 function foxPostSignObject() {
     return '<div class="fp-sign-on-table"><div class="fp-small-blueprint"><span>Чертёж барсука</span>' + foxPostTagInk('nom', 1, 68) + '</div>'
         + '<button type="button" class="fp-sign-slot" data-action="fox-drop-piece" data-fp-drop="sign" aria-label="Вставить выбранную дощечку в указатель">'

@@ -1,10 +1,10 @@
 (() => {
     // Capture the owning script URL before awaiting; Tilda may embed this trainer.
     const base = new URL('.', document.currentScript.src);
-    const revision = '92e02dbadc48';
+    const revision = 'f26481d79a2c';
     const resources = [
         ['trainer-core.js', 'sha256-y2V3zRsO/rHiW0w0elXZaCCaRMGydT1tGYFBMT5Zj/c='],
-        ['fox-post.js', 'sha256-bXaraCEm3I4B76NmRM0Rnueczdr4GTObEdlVGvMTWWw='],
+        ['fox-post.js', 'sha256-/egShjXkt38CzapGLkmQH9m12MqgLCJVuW9XLVquuIg='],
     ];
     async function start() {
         const art = new URL('fox-post-map.webp?v=' + revision, base).href;
